@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+  </head>
+  <style>
+    body{
+      margin: 0px;
+    }
+
+    #navbar{
+      border:  1px solid red;
+      background-color: teal;
+      display: flex;
+      flex-direction: row-reverse;
+      padding: 10px;
+      color: white;
+    }
+    #navbar > div {
+      border: 1px solid blue;
+      margin: 20px;
+      cursor: pointer;
+    }
+    #menu {
+      border: 1px solid red;
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 20px;
+      width: 90%;
+      margin: auto;
+      margin-top: 20px;
+      
+    }
+    #menu > div {
+      padding: 10px;
+      border: 1px solid #cecece;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    img{
+      width: 250px;
+      height: 200px;
+      object-fit: cover;
+    }
+  </style>
+
+  <body>
+    <div id="navbar">
+      <!--Add menu divs here-->
+      <div id="count">Count</div>
+      <div id="SignUp">SignUp</div>
+      <div id="SignIn">SignIn</div>
+      <div id="Menu">Menu</div>
+    </div>
+
+    <div id="menu">
+
+      <!--Show indian dishes here in grid format-->
+      <!-- add an add to cart button to each dish, give it HTML id as 'addtocart' -->
+
+    </div>
+  </body>
+
+</html>
+<script>
+  
+  
+  //console.log(url)
+
+  async function getProduct() {
+
+    try {
+      let res = await fetch("https://www.themealdb.com/api/json/v1/1/filter.php?a=Indian");
+      let data = await res.json()
+      
+      appendproduct(data)
+
+     // console.log("data:",data)
+    }
+    catch(error) {
+      console.log("err:" ,error);
+    }
+  }
+  getProduct()
+
+  
+  function appendproduct(data) {
+    console.log("data:",data.meals);
+    //console.log("data:",data);
+    let data2 = data.meals
+    let menu = document.getElementById("menu");
+    //menu.innerHTML= "";
+    data2.forEach(function(el) {
+      
+      let div = document.createElement("div");
+
+      let img = document.createElement("img");
+      img.src = el.strMealThumb;
+
+      let itemname = document.createElement("p");
+      itemname.innerText = el.strMeal;
+
+      let id = document.createElement("p");
+      id.innerText = "price:INR"+ Math.floor(el.idMeal/500)
+
+      let addToCartButton=document.createElement("button");
+         addToCartButton.textContent = "Add to Cart"
+         addToCartButton.onclick = function(event){
+           addToCart(el);
+         }
+
+      div.append(img , id , itemname,addToCartButton);
+
+      menu.append(div)
+    });
+  }
+</script>
